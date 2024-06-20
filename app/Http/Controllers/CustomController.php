@@ -6,15 +6,12 @@ use App\Models\Custom;
 use App\Http\Requests\StoreCustomRequest;
 use App\Http\Requests\UpdateCustomRequest;
 use App\Http\Resources\CustomResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class CustomController extends Controller
 {
-
-    public function __construct()
-    {
-        // parent::__construct();
-        // dd(auth());
-    }
 
     /**
      * Display a listing of the resource.
@@ -23,7 +20,7 @@ class CustomController extends Controller
      */
     public function index()
     {
-        return CustomResource::collection(Custom::all());
+        return CustomResource::collection(Custom::ownedBy(Auth::user())->get());
     }
 
     /**
@@ -55,6 +52,7 @@ class CustomController extends Controller
      */
     public function show(Custom $custom)
     {
+        if (Gate::denies('get-data', $custom)) abort(403);
         return new CustomResource($custom);
     }
 

@@ -27,6 +27,11 @@ class Quality extends Model
         'apply_date' => 'datetime:Y-m-d',
     ];
 
+    protected $with = [
+        'applierInfo'
+    ];
+
+
     protected static function boot()
     {
         parent::boot();

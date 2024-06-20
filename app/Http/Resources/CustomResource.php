@@ -16,7 +16,7 @@ class CustomResource extends JsonResource
     public function toArray($request)
     {
 
-        $this->resource->load(['applierInfo', 'customerInfo']);
+        // $this->resource->load(['applierInfo', 'customerInfo']);
 
         return Arr::only(parent::toArray($request), [
             'num',

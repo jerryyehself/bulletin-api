@@ -16,7 +16,7 @@ class QualityResource extends JsonResource
     public function toArray($request)
     {
 
-        $this->resource->load(['applierInfo']);
+        // $this->resource->load(['applierInfo']);
 
         return Arr::only(parent::toArray($request), [
             'num',
