@@ -7,7 +7,6 @@ use App\Http\Requests\StoreCustomRequest;
 use App\Http\Requests\UpdateCustomRequest;
 use App\Http\Resources\CustomResource;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class CustomController extends Controller

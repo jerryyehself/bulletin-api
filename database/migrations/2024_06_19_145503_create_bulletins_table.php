@@ -14,8 +14,13 @@ class CreateBulletinsTable extends Migration
     public function up()
     {
         Schema::create('bulletins', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('id');
+            $table->string('num')->comment('單號');
+            $table->string('closed_by')->comment('關閉提醒者ID');
+            $table->string('title')->comment('標題');
+            $table->string('abstract')->comment('說明');
+            $table->timestamp('limit_date')->comment('提醒期限');
+            $table->timestamp('closed_date')->comment('關閉提醒時間');
         });
     }
 

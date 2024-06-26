@@ -6,6 +6,7 @@ use App\Models\Quality;
 use App\Http\Requests\StoreQualityRequest;
 use App\Http\Requests\UpdateQualityRequest;
 use App\Http\Resources\QualityResource;
+use Illuminate\Support\Facades\Auth;
 
 class QualityController extends Controller
 {
@@ -16,7 +17,7 @@ class QualityController extends Controller
      */
     public function index()
     {
-        return QualityResource::collection(Quality::all());
+        return QualityResource::collection(Quality::ownedBy(Auth::user())->get());
     }
 
     /**

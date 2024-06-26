@@ -17,19 +17,10 @@ class CustomerFactory extends Factory
     public function definition()
     {
         return [
-            // 'cust_id' => '1',
             'cust_name' => $this->faker->unique()->company,
             'cust_mail' => $this->faker->safeEmail,
             'cust_phone' => $this->faker->tollFreePhoneNumber,
             'cust_address' => $this->faker->streetAddress
         ];
     }
-
-    // public function configure()
-    // {
-    //     Customer::observe(new class
-    //     {
-    //         use NewCustomer;
-    //     });
-    // }
 }

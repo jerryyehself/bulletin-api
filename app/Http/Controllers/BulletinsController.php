@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Bulletins;
 use App\Http\Requests\StoreBulletinsRequest;
 use App\Http\Requests\UpdateBulletinsRequest;
+use App\Models\Custom;
+use App\Models\Quality;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class BulletinsController extends Controller
 {
@@ -15,7 +19,17 @@ class BulletinsController extends Controller
      */
     public function index()
     {
-        //
+        $model = Bulletins::$bulletSys[rand(0, 1)];
+        // dd($model::find(1)->toArray());
+        // $bulletSys = $model::select('num', 'applier_id', '')->whereNotIn('num', ['1']);
+        $bulletSys = $model['sys']::select(array_merge($model['fields'], ['num', 'applier_id']))
+            ->whereNotIn(
+                'num',
+                Bulletins::pluck('num')->toArray()
+            )->get()->toArray();
+        // dd(DB::select('select num from qualities union select num from customs'));
+        dd($bulletSys);
+        dd(Bulletins::pluck('num')->toArray());
     }
 
     /**
@@ -83,4 +97,9 @@ class BulletinsController extends Controller
     {
         //
     }
+
+    // protected function getBulletData(){
+    //     $a = new CustomController;
+    //     $d= $a->index()
+    // }
 }

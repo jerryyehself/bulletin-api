@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BulletinsController;
 use App\Http\Controllers\CustomController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\QualityController;
@@ -31,7 +32,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources([
         'customs' => CustomController::class,
-        'qualities' => QualityController::class
+        'qualities' => QualityController::class,
+        'bulletin' => BulletinsController::class
     ]);
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
