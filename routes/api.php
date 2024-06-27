@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         'qualities' => QualityController::class,
         'bulletin' => BulletinsController::class
     ]);
+
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return response($request->user(), 201);

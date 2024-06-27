@@ -19,7 +19,7 @@ class CustomController extends Controller
      */
     public function index()
     {
-        return CustomResource::collection(Custom::ownedBy(Auth::user())->get());
+        return CustomResource::collection(Custom::ownedBy()->get());
     }
 
     /**

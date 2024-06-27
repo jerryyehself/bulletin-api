@@ -2,11 +2,13 @@
 
 namespace App\Traits;
 
+use Illuminate\Database\Eloquent\Builder;
+
 trait OwnedByUser
 {
 
-    public static function scopeOwnedBy($query, $user)
+    public static function scopeOwnedBy(Builder $query)
     {
-        return $query->where('applier_id', $user->user_id);
+        $query->where('applier_id', auth()->user()->user_id);
     }
 }
