@@ -15,12 +15,6 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $aa = new Customer;
-        $aa->cust_name = 'aa';
-        $aa->cust_mail = 'aaa';
-        $aa->cust_phone = 'aaa';
-        $aa->cust_address = 'aaa';
-        $aa->save();
     }
 
     /**

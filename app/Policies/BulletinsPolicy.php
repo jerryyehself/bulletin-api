@@ -65,7 +65,6 @@ class BulletinsPolicy
      */
     public function delete(User $user, Bulletins $bulletins)
     {
-        //
     }
 
     /**

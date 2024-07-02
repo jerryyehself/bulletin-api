@@ -35,11 +35,10 @@ class BulletinsFactory extends Factory
 
         return [
             'num' => $bulletSys['num'],
-            // 'closed_by' => auth()->user()->user_id,
             'closed_by' => $this->faker->randomElement(User::pluck('user_id')),
             'limit_date' => $bulletSys['limit_date'],
-            'title' => $bulletSys['title'],
-            'abstract' => Str::limit($bulletSys['abstract'], 20),
+            // 'title' => $bulletSys['title'],
+            // 'abstract' => Str::limit($bulletSys['abstract'], 20),
             'closed_date' => $this->faker->dateTime($max = 'now', $timezone = null),
         ];
     }

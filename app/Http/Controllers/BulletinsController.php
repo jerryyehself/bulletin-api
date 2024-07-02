@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bulletins;
 use App\Http\Requests\StoreBulletinsRequest;
 use App\Http\Requests\UpdateBulletinsRequest;
-use App\Models\Custom;
-use App\Models\Quality;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class BulletinsController extends Controller
 {
@@ -20,9 +17,13 @@ class BulletinsController extends Controller
     public function index()
     {
         foreach (Bulletins::$bulletSys as $sys) {
-            dd(class_basename($sys['sys']));
-            // $col[] = 
+            $sysBasename = class_basename($sys['sys']);
+            $resourceClass = "App\\Http\\Resources\\{$sysBasename}Resource";
+            $list[$sysBasename] = $resourceClass::collection($sys['sys']::ownedBy()->get());
         }
+        dd(app('bulletinList'));
+
+        return $list;
     }
 
     /**
@@ -43,7 +44,18 @@ class BulletinsController extends Controller
      */
     public function store(StoreBulletinsRequest $request)
     {
-        //
+
+        Bulletins::updateOrCreate(
+            [
+                'closed_by' => auth()->user()->user_id,
+                'num' => $request->input('num')
+            ],
+            [
+                'closed_date' => Carbon::now()
+            ],
+        );
+
+        return response(['result' => 'closed success.'], 200);
     }
 
     /**
@@ -54,7 +66,6 @@ class BulletinsController extends Controller
      */
     public function show(Bulletins $bulletins)
     {
-        //
     }
 
     /**
@@ -86,13 +97,12 @@ class BulletinsController extends Controller
      * @param  \App\Models\Bulletins  $bulletins
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Bulletins $bulletins)
+    public function destroy(Bulletins $bulletin)
     {
-        //
-    }
+        dd('aa');
+        // if (Gate::denies('get-data', $custom)) abort(403);
+        $bulletin->delete();
 
-    // protected function getBulletData(){
-    //     $a = new CustomController;
-    //     $d= $a->index()
-    // }
+        return response("{$bulletin->num} alert reboot again", 200);
+    }
 }

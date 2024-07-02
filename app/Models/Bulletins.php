@@ -10,11 +10,9 @@ class Bulletins extends Model
     use HasFactory;
 
     protected $fillable = [
-        'limit_date',
         'num',
-        'title',
-        'abstract',
-        'closed_by'
+        'closed_by',
+        'closed_date'
     ];
 
     public $timestamps = false;
