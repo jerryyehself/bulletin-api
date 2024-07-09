@@ -6,9 +6,23 @@ use App\Models\Bulletins;
 use App\Http\Requests\StoreBulletinsRequest;
 use App\Http\Requests\UpdateBulletinsRequest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class BulletinsController extends Controller
 {
+    private $bulletin;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+
+            $this->bulletin = app('bulletinList');
+
+            return $next($request);
+        });
+
+        // $this->authorizeResource(Bulletins::class, 'bulletin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,14 +30,7 @@ class BulletinsController extends Controller
      */
     public function index()
     {
-        foreach (Bulletins::$bulletSys as $sys) {
-            $sysBasename = class_basename($sys['sys']);
-            $resourceClass = "App\\Http\\Resources\\{$sysBasename}Resource";
-            $list[$sysBasename] = $resourceClass::collection($sys['sys']::ownedBy()->get());
-        }
-        dd(app('bulletinList'));
-
-        return $list;
+        return $this->bulletin->get('bulletin_collection');
     }
 
     /**
@@ -44,6 +51,7 @@ class BulletinsController extends Controller
      */
     public function store(StoreBulletinsRequest $request)
     {
+        $this->authorize('create', [Bulletins::class, $request->validated()]);
 
         Bulletins::updateOrCreate(
             [
