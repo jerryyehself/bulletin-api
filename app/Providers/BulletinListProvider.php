@@ -31,12 +31,27 @@ class BulletinListProvider extends ServiceProvider
         });
     }
 
-    protected function getBulletinList()
+    protected function getBulletinList($userId = null)
     {
         $closedList = $this->getClosedList();
 
+        $list = $this->setBulletinList($closedList);
+
         $list['closed_list'] = $closedList;
 
+        return collect($list);
+    }
+
+    protected function getClosedList()
+    {
+        return Bulletins::select('num')
+            ->where('closed_by', auth()->user()->user_id)
+            ->get()
+            ->pluck('num');
+    }
+
+    protected function setBulletinList($closedList)
+    {
         foreach (Bulletins::$bulletSys as $sys) {
 
             $sysBasename = class_basename($sys['sys']);
@@ -54,14 +69,6 @@ class BulletinListProvider extends ServiceProvider
                 : $numList;
         }
 
-        return collect($list);
-    }
-
-    protected function getClosedList()
-    {
-        return Bulletins::select('num')
-            ->where('closed_by', auth()->user()->user_id)
-            ->get()
-            ->pluck('num');
+        return $list;
     }
 }

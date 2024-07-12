@@ -39,6 +39,7 @@ class Handler extends ExceptionHandler
             //
         });
 
+        // api route response with json
         $this->renderable(function (AccessDeniedHttpException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([

@@ -24,7 +24,7 @@ class StoreBulletinsRequest extends FormRequest
     public function rules()
     {
         return [
-            'num' => 'required'
+            'nums.*' => 'required'
         ];
     }
 }

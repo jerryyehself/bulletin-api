@@ -52,12 +52,23 @@ class BulletinsPolicy
      */
     public function create(User $user, array $attributes)
     {
+        // dd($user->roles);
+        $msg = collect();
 
-        if ($this->closedList->containsStrict($attributes['num']))
-            return Response::deny('Already closed.');
+        $inputNums = collect($attributes['nums']);
 
-        if ($this->bulletinList->doesntContain($attributes['num']))
-            return Response::deny('Not availible.');
+        //
+        $closed = $inputNums->merge($this->closedList)->duplicates();
+        $notAvailable = $inputNums->diff($this->bulletinList->merge($this->closedList));
+
+        if ($closed->count())
+            $msg->push('nums alert already closed: ' . $closed->join(', '));
+
+        if ($notAvailable->count())
+            $msg->push('nums not availible: ' . $notAvailable->join(', '));
+
+        if ($msg->count())
+            return Response::deny($msg->join(', '));
 
         return Response::allow();
     }

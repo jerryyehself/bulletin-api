@@ -8,9 +8,21 @@ use Illuminate\Database\Eloquent\Builder;
 trait OwnedByUser
 {
 
-    public static function scopeOwnedBy(Builder $query)
+    public static function scopeOwnedBy(Builder $query, array $userId = [])
     {
-        $query->where('applier_id', auth()->user()->user_id);
+        $userId[] = auth()->user()->user_id;
+
+        $userId = array_merge(
+            $userId,
+            auth()->user()->roles
+                ->pluck('pivot.role_member')
+                ->flatMap(function ($roleMembers) {
+                    return explode(',', $roleMembers);
+                })
+                ->toArray()
+        );
+
+        $query->whereIn('applier_id', $userId);
     }
 
     public static function scopeBulletList(Builder $query)

@@ -34,16 +34,6 @@ class BulletinsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreBulletinsRequest  $request
@@ -53,14 +43,20 @@ class BulletinsController extends Controller
     {
         $this->authorize('create', [Bulletins::class, $request->validated()]);
 
-        Bulletins::updateOrCreate(
-            [
-                'closed_by' => auth()->user()->user_id,
-                'num' => $request->input('num')
-            ],
-            [
-                'closed_date' => Carbon::now()
-            ],
+        $nums = collect($request->safe()->only('nums')['nums']);
+
+        $nums->each(
+            function ($num) {
+                Bulletins::updateOrCreate(
+                    [
+                        'closed_by' => auth()->user()->user_id,
+                        'num' => $num
+                    ],
+                    [
+                        'closed_date' => Carbon::now('Asia/Taipei')
+                    ],
+                );
+            }
         );
 
         return response(['result' => 'closed success.'], 200);
@@ -77,29 +73,6 @@ class BulletinsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Bulletins  $bulletins
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Bulletins $bulletins)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateBulletinsRequest  $request
-     * @param  \App\Models\Bulletins  $bulletins
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateBulletinsRequest $request, Bulletins $bulletins)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Bulletins  $bulletins
@@ -107,8 +80,6 @@ class BulletinsController extends Controller
      */
     public function destroy(Bulletins $bulletin)
     {
-        dd('aa');
-        // if (Gate::denies('get-data', $custom)) abort(403);
         $bulletin->delete();
 
         return response("{$bulletin->num} alert reboot again", 200);
